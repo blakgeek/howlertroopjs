@@ -88,6 +88,19 @@ var MusicAudioManager = (function() {
 			track.fadeIn(1, .5);
 
 			activeTrack = track;
+		},
+
+		pause: function() {
+			if(activeTrack) {
+				activeTrack.pause();
+			}
+		},
+
+		resume: function() {
+
+			if(activeTrack) {
+				activeTrack.play();
+			}
 		}
 	}
 })();
