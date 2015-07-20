@@ -52,6 +52,10 @@ var MusicAudioManager = (function() {
 				volume: .5
 			});
 
+			if(autoplay, activeTrack && activeTrack !== track) {
+				activeTrack.fadeOut(0, .5);
+			}
+
 			track.play = function() {
 				if(musicEnabled) {
 					Howl.prototype.play.apply(track, arguments);
@@ -76,6 +80,11 @@ var MusicAudioManager = (function() {
 			};
 
 			allTracks.push(track);
+			
+			if(autoplay) {
+				activeTrack = track;
+			}
+
 			return track;
 		},
 
