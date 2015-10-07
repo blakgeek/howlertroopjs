@@ -29,16 +29,26 @@ var SoundAudioManager = (function() {
 
 var MusicAudioManager = (function() {
 	var musicEnabled = true,
+        paused = false,
 		activeTrack = null,
 		allTracks = [];
 
 	return {
 		setMusicEnabled: function(enabled) {
+
+            if(enabled === musicEnabled) {
+                return;
+            }
+
 			if(!!enabled) {
 				musicEnabled = true;
-				if(activeTrack) activeTrack.fadeIn(1, .5);
+				if(activeTrack && !paused) {
+                    activeTrack.fadeIn(1, .5);
+                }
 			} else {
-				if(activeTrack) activeTrack.fadeOut(0, .5);
+				if(activeTrack && !paused) {
+                    activeTrack.fadeOut(0, .5);
+                }
 				musicEnabled = false;
 			}
 		},
@@ -48,11 +58,10 @@ var MusicAudioManager = (function() {
 			var track = new Howl({
 				urls: [url],
 				autoplay: musicEnabled && autoplay === true,
-				loop: true,
-				volume: .5
+				loop: true
 			});
 
-			if(autoplay, activeTrack && activeTrack !== track) {
+			if(autoplay && activeTrack) {
 				activeTrack.fadeOut(0, .5);
 			}
 
@@ -80,7 +89,7 @@ var MusicAudioManager = (function() {
 			};
 
 			allTracks.push(track);
-			
+
 			if(autoplay) {
 				activeTrack = track;
 			}
@@ -97,19 +106,23 @@ var MusicAudioManager = (function() {
 			track.fadeIn(1, .5);
 
 			activeTrack = track;
+			paused = false;
 		},
 
 		pause: function() {
 			if(activeTrack) {
 				activeTrack.pause();
 			}
+            paused = true;
 		},
 
 		resume: function() {
 
-			if(activeTrack) {
+			if(paused && activeTrack) {
 				activeTrack.play();
 			}
+
+            paused = false;
 		}
 	}
 })();
