@@ -1,130 +1,111 @@
-var SoundAudioManager = (function() {
+var SoundAudioManager = (function () {
 
-	var soundEnabled = true;
+    var soundEnabled = true;
 
-	return {
-		setSoundEnabled: function(enabled) {
-			soundEnabled = !!enabled;
-		},
+    return {
+        setSoundEnabled: function (enabled) {
+            soundEnabled = !!enabled;
+        },
 
-		createSound: function(url) {
+        createSound: function (name) {
 
-			var sound = new Howl({
-				urls: [url],
-				autoplay: false
-			});
+            var sound = new Howl({
+                urls: ['audio/' + name + '.mp3'],
+                autoplay: false
+            });
 
-			sound.play = function() {
-				if(soundEnabled) {
-					Howl.prototype.play.apply(sound, arguments);
-				}
+            return {
+                play: function() {
 
-				return sound;
-			};
-
-			return sound;
-		}
-	};
+                    if(soundEnabled) {
+                        sound.play();
+                    }
+                }
+            }
+        }
+    };
 })();
 
-var MusicAudioManager = (function() {
-	var musicEnabled = true,
-        paused = false,
-		activeTrack = null,
-		allTracks = [];
+var MusicAudioManager = (function () {
+    var musicEnabled = true,
+        activeTrack = null,
+        allTracks = [];
 
-	return {
-		setMusicEnabled: function(enabled) {
+    Howler.unload();
 
-            if(enabled === musicEnabled) {
-                return;
+    return {
+        setMusicEnabled: function (enabled) {
+            if (enabled) {
+                musicEnabled = true;
+                if (activeTrack) activeTrack.fadeIn();
+            } else {
+                stopAllTracks();
+                musicEnabled = false;
+            }
+        },
+
+        createTrack: function (name, autoplay) {
+
+            var track = new Howl({
+                urls: ['audio/' + name + '.mp3'],
+                autoplay: musicEnabled && autoplay === true,
+                loop: true
+            });
+
+            allTracks.push(track);
+
+            return {
+                play: function () {
+                    if (musicEnabled) {
+                        track.play();
+                    }
+                },
+                pause: function () {
+
+                },
+                fadeIn: function (a, b) {
+
+                    if (musicEnabled) {
+                        track.fadeIn(1,.5);
+                    }
+                },
+                fadeOut: function (a, b) {
+                    if (musicEnabled) {
+                        track.fadeOut(0,.5);
+                    }
+                }
+            };
+        },
+
+        playTrack: function (track) {
+
+            if (activeTrack && activeTrack !== track) {
+                activeTrack.fadeOut();
             }
 
-			if(!!enabled) {
-				musicEnabled = true;
-				if(activeTrack && !paused) {
-                    activeTrack.fadeIn(1, .5);
-                }
-			} else {
-				if(activeTrack && !paused) {
-                    activeTrack.fadeOut(0, .5);
-                }
-				musicEnabled = false;
-			}
-		},
+            track.fadeIn();
 
-		createTrack: function(url, autoplay) {
+            activeTrack = track;
+        },
 
-			var track = new Howl({
-				urls: [url],
-				autoplay: musicEnabled && autoplay === true,
-				loop: true
-			});
+        pause: function () {
+            stopAllTracks();
+        },
 
-			if(autoplay && activeTrack) {
-				activeTrack.fadeOut(0, .5);
-			}
+        resume: function () {
 
-			track.play = function() {
-				if(musicEnabled) {
-					Howl.prototype.play.apply(track, arguments);
-				}
+            if (activeTrack) {
+                activeTrack.play();
+            }
+        }
+    };
 
-				return track;
-			};
+    function stopAllTracks() {
 
-			track.fadeIn = function() {
-				if(musicEnabled) {
-					Howl.prototype.fadeIn.apply(track, arguments);
-				}
-				return track;
-			};
-
-			track.fadeOut = function() {
-				if(musicEnabled) {
-					Howl.prototype.fadeOut.apply(track, arguments);
-				}
-
-				return track;
-			};
-
-			allTracks.push(track);
-
-			if(autoplay) {
-				activeTrack = track;
-			}
-
-			return track;
-		},
-
-		playTrack: function(track) {
-
-			if(activeTrack && activeTrack !== track) {
-				activeTrack.fadeOut(0, .5);
-			}
-
-			track.fadeIn(1, .5);
-
-			activeTrack = track;
-			paused = false;
-		},
-
-		pause: function() {
-			if(activeTrack) {
-				activeTrack.pause();
-			}
-            paused = true;
-		},
-
-		resume: function() {
-
-			if(paused && activeTrack) {
-				activeTrack.play();
-			}
-
-            paused = false;
-		}
-	}
+        allTracks.forEach(function (track) {
+            track.stop();
+        });
+    }
 })();
 
 

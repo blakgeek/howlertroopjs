@@ -22,6 +22,6 @@
     "tests"
   ],
   "dependencies": {
-    "howler": "~1.1.26"
+    "howler.js": "howler#2.0"
   }
 }
