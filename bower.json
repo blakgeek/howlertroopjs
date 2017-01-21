@@ -1,18 +1,11 @@
 {
   "name": "howlertroopjs",
-  "version": "1.4.0",
   "homepage": "https://github.com/blakgeek/howlertroopjs",
   "authors": [
-    "Carlos \"blakgeek\" Lawton"
+    "blakgeek <blakgeek@gmail.com>"
   ],
-  "description": "A little library for creating groups of howler audio so they can be enabled and disabled seperately.",
-  "main": "troop.js",
-  "keywords": [
-    "howler.js",
-    "audio",
-    "groups",
-    "html5"
-  ],
+  "description": "",
+  "main": "",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -20,8 +13,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "howler.js": "^2"
-  }
+  ]
 }
