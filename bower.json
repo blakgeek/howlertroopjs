@@ -22,6 +22,6 @@
     "tests"
   ],
   "dependencies": {
-    "howler.js": "*"
+    "howler.js": "^2"
   }
 }

@@ -10,7 +10,7 @@ var SoundAudioManager = (function () {
         createSound: function (name) {
 
             var sound = new Howl({
-                urls: ['audio/' + name + '.mp3'],
+                src: ['audio/' + name + '.mp3'],
                 autoplay: false
             });
 
@@ -47,7 +47,7 @@ var MusicAudioManager = (function () {
         createTrack: function (name, autoplay) {
 
             var track = new Howl({
-                urls: ['audio/' + name + '.mp3'],
+                src: ['audio/' + name + '.mp3'],
                 autoplay: musicEnabled && autoplay === true,
                 loop: true
             });
@@ -66,12 +66,12 @@ var MusicAudioManager = (function () {
                 fadeIn: function (a, b) {
 
                     if (musicEnabled) {
-                        track.fadeIn(1,.5);
+                        track.fade(0, 1, 500);
                     }
                 },
                 fadeOut: function (a, b) {
                     if (musicEnabled) {
-                        track.fadeOut(0,.5);
+                        track.fade(1, 0, 500);
                     }
                 }
             };
