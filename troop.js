@@ -7,10 +7,10 @@ var SoundAudioManager = (function () {
             soundEnabled = !!enabled;
         },
 
-        createSound: function (name) {
+        createSound: function (url) {
 
             var sound = new Howl({
-                src: ['audio/' + name + '.mp3'],
+                src: [url],
                 autoplay: false
             });
 
@@ -44,10 +44,10 @@ var MusicAudioManager = (function () {
             }
         },
 
-        createTrack: function (name, autoplay) {
+        createTrack: function (url, autoplay) {
 
             var track = new Howl({
-                src: ['audio/' + name + '.mp3'],
+                src: [url],
                 autoplay: musicEnabled && autoplay === true,
                 loop: true
             });
